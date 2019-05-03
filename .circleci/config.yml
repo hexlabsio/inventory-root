@@ -1,7 +1,7 @@
 version: 2
 workflows:
   version: 2
-  my-workflow:
+  build-workflow:
     jobs:
     - build:
         context: hexlabs-aws
@@ -23,7 +23,7 @@ jobs:
 
     - run:
         name: Deploy Stack
-        command:  ./kloudformation.sh deploy -stack-name inventory-root -output output.properties
+        command:  ./kloudformation.sh deploy -stack-name inventory-root -output output.properties -v 1.0.4
 
     - store_artifacts:
         path: template.yml
