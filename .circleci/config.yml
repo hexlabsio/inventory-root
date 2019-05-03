@@ -1,0 +1,37 @@
+version: 2
+workflows:
+  version: 2
+  my-workflow:
+    jobs:
+    - build:
+        context: hexlabs-aws
+jobs:
+  build:
+    machine:
+      enabled: true
+    working_directory: ~/inventory-root
+    steps:
+    - checkout
+
+    - run:
+        name: Install KloudFormation
+        command: curl -sSL install.kloudformation.hexlabs.io | bash -s -- -local
+
+    - restore_cache:
+        keys:
+        - kloudformation-{{ checksum "kloudformation.sh" }}
+
+    - run:
+        name: Deploy Stack
+        command:  ./kloudformation.sh deploy -stack-name inventory-root -output output.properties
+
+    - store_artifacts:
+        path: template.yml
+
+    - store_artifacts:
+        path: output.properties
+
+    - save_cache:
+        paths:
+        - ~/.kloudformation
+        key: kloudformation-{{ checksum "kloudformation.sh" }}
