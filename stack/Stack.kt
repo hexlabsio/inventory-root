@@ -30,6 +30,7 @@ class Stack: StackBuilder {
         }
         bucketPolicy(bucket.ref(), policyDocument("PutObjectPolicy", IamPolicyVersion.V2.version){
             statement(action("s3:PutObject"), IamPolicyEffect.Deny, resource(bucket.Arn() + "/*")) {
+                allPrincipals()
                 condition("StringNotEquals", mapOf("s3:x-amz-server-side-encryption" to +"AES256"))
             }
         })
