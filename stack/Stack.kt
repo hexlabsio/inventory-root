@@ -20,6 +20,12 @@ class Stack: StackBuilder {
     override fun KloudFormation.create(args: List<String>) {
         val bucket = bucket(resourceProperties = ResourceProperties(deletionPolicy = DeletionPolicy.RETAIN.policy)) {
             bucketName("hexlabs-inventory")
+            publicAccessBlockConfiguration {
+                blockPublicAcls(true)
+                blockPublicPolicy(true)
+                ignorePublicAcls(true)
+                restrictPublicBuckets(true)
+            }
             bucketEncryption(listOf(ServerSideEncryptionRule(
                     ServerSideEncryptionByDefault(sSEAlgorithm = +"AES256")
             )))
